@@ -21,19 +21,17 @@ def download_image(url, filename):
         f.write(img_data)
 
 
-async def send_image(filename, caption, chat_id, bot):
-    input_file = FSInputFile(filename)
-    await bot.send_photo(chat_id=chat_id, photo=input_file, caption=caption)
-
-
 async def send_comic(filename, chat_id, bot):
     comic = get_random_comic()
     img_url = comic["img"]
     caption = comic["alt"]
 
     download_image(img_url, filename)
+    
+    input_file = FSInputFile(filename)
+    
     try:
-        await send_image(filename, caption, chat_id, bot)
+        await bot.send_photo(chat_id=chat_id, photo=input_file, caption=caption)
     finally:
         if os.path.exists(filename):
             os.remove(filename)
