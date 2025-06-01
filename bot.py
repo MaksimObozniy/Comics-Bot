@@ -39,7 +39,7 @@ async def send_comic(filename, chat_id, bot):
             os.remove(filename)
 
 
-async def main():
+def main():
     load_dotenv()
 
     tg_token = os.getenv("TG_BOT_TOKEN")
