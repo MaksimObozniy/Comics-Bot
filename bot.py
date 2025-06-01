@@ -6,13 +6,6 @@ from aiogram.types import FSInputFile
 from aiogram import Bot
 from dotenv import load_dotenv
 
-load_dotenv()
-
-TOKEN = os.getenv("TG_BOT_TOKEN")
-CHAT_ID = os.getenv("TG_CHAT_ID") 
-FILENAME = "comics.png"
-
-bot = Bot(token=TOKEN)
 
 def get_random_comic():
     latest = requests.get("https://xkcd.com/info.0.json").json()
@@ -43,5 +36,14 @@ async def scheduler():
 async def main():
     await scheduler()
 
+
 if __name__ == "__main__":
+    load_dotenv()
+    
+    TOKEN = os.getenv("TG_BOT_TOKEN")
+    CHAT_ID = os.getenv("TG_CHAT_ID") 
+    FILENAME = "comics.png"
+    
+    bot = Bot(token=TOKEN)
+    
     asyncio.run(main())
