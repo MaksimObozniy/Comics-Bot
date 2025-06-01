@@ -27,17 +27,19 @@ async def send_comic(filename, chat_id, bot):
     caption = comic["alt"]
 
     download_image(img_url, filename)
-    
+
     input_file = FSInputFile(filename)
-    
+
     try:
-        await bot.send_photo(chat_id=chat_id, photo=input_file, caption=caption)
+        await bot.send_photo(chat_id=chat_id,
+                             photo=input_file,
+                             caption=caption)
     finally:
         if os.path.exists(filename):
             os.remove(filename)
 
 
-def main():
+async def main():
     load_dotenv()
 
     tg_token = os.getenv("TG_BOT_TOKEN")
