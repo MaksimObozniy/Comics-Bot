@@ -14,39 +14,35 @@ def get_random_comic():
     url = f"https://xkcd.com/{num}/info.0.json"
     return requests.get(url).json()
 
-async def send_comic():
+async def send_comic(filename, tg_chat_id, bot):
     comic = get_random_comic()
     img_url = comic["img"]
     caption = comic["alt"]
 
     img_data = requests.get(img_url).content
-    with open(FILENAME, "wb") as f:
+    with open(filename, "wb") as f:
         f.write(img_data)
 
-    input_file = FSInputFile(FILENAME)
-    await bot.send_photo(chat_id=CHAT_ID, photo=input_file, caption=caption)
+    input_file = FSInputFile(filename)
+    await bot.send_photo(chat_id=tg_chat_id, photo=input_file, caption=caption)
     
-    os.remove(FILENAME)
+    os.remove(filename)
 
-async def scheduler():
-    while True:
-        await send_comic()
-        await asyncio.sleep(60 * 30)
-
-async def run_bot():
-    await scheduler()
-    
 def main():
-    asyncio.run(run_bot())
-
-
-if __name__ == "__main__":
     load_dotenv()
     
-    TOKEN = os.environ("TG_BOT_TOKEN")
-    CHAT_ID = os.environ("TG_CHAT_ID") 
-    FILENAME = "comics.png"
+    tg_token = os.environ("TG_BOT_TOKEN")
+    tg_chat_id = os.environ("TG_CHAT_ID") 
+    filename = "comics.png"
     
-    bot = Bot(token=TOKEN)
+    bot = Bot(token=tg_token)
+    
+    async def scheduler():
+        while True:
+            await send_comic(filename, tg_chat_id, bot)
+            await asyncio.sleep(60 * 30)
 
+    asyncio.run(scheduler())
+
+if __name__ == "__main__":
     main()
