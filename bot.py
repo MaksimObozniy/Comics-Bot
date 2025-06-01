@@ -33,7 +33,7 @@ async def scheduler():
         await send_comic()
         await asyncio.sleep(60 * 30)
 
-async def main():
+async def run_bot():
     await scheduler()
 
 
@@ -46,4 +46,4 @@ if __name__ == "__main__":
     
     bot = Bot(token=TOKEN)
     
-    asyncio.run(main())
+    asyncio.run(run_bot())
