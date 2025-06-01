@@ -43,8 +43,8 @@ def main():
 if __name__ == "__main__":
     load_dotenv()
     
-    TOKEN = os.getenv("TG_BOT_TOKEN")
-    CHAT_ID = os.getenv("TG_CHAT_ID") 
+    TOKEN = os.environ("TG_BOT_TOKEN")
+    CHAT_ID = os.environ("TG_CHAT_ID") 
     FILENAME = "comics.png"
     
     bot = Bot(token=TOKEN)
