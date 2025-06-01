@@ -23,9 +23,9 @@ async def send_comic():
     with open(FILENAME, "wb") as f:
         f.write(img_data)
 
-    input_file = FSInputFile(FILENAME)  # <-- правильный способ
+    input_file = FSInputFile(FILENAME)
     await bot.send_photo(chat_id=CHAT_ID, photo=input_file, caption=caption)
-
+    
     os.remove(FILENAME)
 
 async def scheduler():
@@ -35,6 +35,9 @@ async def scheduler():
 
 async def run_bot():
     await scheduler()
+    
+def main():
+    asyncio.run(run_bot())
 
 
 if __name__ == "__main__":
@@ -45,5 +48,5 @@ if __name__ == "__main__":
     FILENAME = "comics.png"
     
     bot = Bot(token=TOKEN)
-    
-    asyncio.run(run_bot())
+
+    main()
