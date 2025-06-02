@@ -18,11 +18,6 @@ def get_random_comic():
     return response_url.json()
 
 
-def get_comic_image_and_caption():
-    comic = get_random_comic()
-    return comic['img'], comic['alt']
-
-
 def download_image(img_url, filename):
     response = requests.get(img_url)
     response.raise_for_status()
@@ -51,7 +46,8 @@ def main():
     bot = Bot(token=tg_token)
 
     while True:
-        img_url, caption = get_comic_image_and_caption()
+        comic = get_random_comic()
+        img_url, caption = comic['img'], comic['alt']
         download_image(img_url, filename)
         try:
             send_comic(filename, chat_id, bot, caption)
