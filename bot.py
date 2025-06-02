@@ -42,8 +42,8 @@ async def send_comic(filename, chat_id, bot):
 def main():
     load_dotenv()
 
-    tg_token = os.getenv("TG_BOT_TOKEN")
-    chat_id = os.getenv("TG_CHAT_ID")
+    tg_token = os.environ("TG_BOT_TOKEN")
+    chat_id = os.environ("TG_CHAT_ID")
     filename = "comics.png"
 
     bot = Bot(token=tg_token)
