@@ -7,11 +7,15 @@ from dotenv import load_dotenv
 
 
 def get_random_comic():
-    latest = requests.get("https://xkcd.com/info.0.json").json()
+    response = requests.get("https://xkcd.com/info.0.json")
+    response.raise_for_status()
+    latest = response.json()
     max_num = latest["num"]
     num = random.randint(1, max_num)
     url = f"https://xkcd.com/{num}/info.0.json"
-    return requests.get(url).json()
+    response_url = requests.get(url)
+    response_url.raise_for_status()
+    return response_url.json()
 
 
 def get_comic_image_and_caption():
@@ -20,9 +24,11 @@ def get_comic_image_and_caption():
 
 
 def download_image(img_url, filename):
-    img_data = requests.get(img_url).content
+    response = requests.get(img_url)
+    response.raise_for_status()
+    img_content = response.content
     with open(filename, "wb") as f:
-        f.write(img_data)
+        f.write(img_content)
 
     
 def remove_file(filename):
@@ -53,7 +59,7 @@ def main():
         img_url, caption = get_comic_image_and_caption()
         download_image(img_url, filename)
         send_comic(filename, chat_id, bot, caption)
-        time.sleep(5)
+        time.sleep(60 * 30)
 
 
 if __name__ == "__main__":
