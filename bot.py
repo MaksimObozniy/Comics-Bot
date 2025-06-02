@@ -1,9 +1,8 @@
 import os
+import time
 import random
 import requests
-import asyncio
-from aiogram.types import FSInputFile
-from aiogram import Bot
+from telegram import Bot
 from dotenv import load_dotenv
 
 
@@ -15,45 +14,46 @@ def get_random_comic():
     return requests.get(url).json()
 
 
-def download_image(url, filename):
-    img_data = requests.get(url).content
+def get_comic_image_and_caption():
+    comic = get_random_comic()
+    return comic['img'], comic['alt']
+
+
+def download_image(img_url, filename):
+    img_data = requests.get(img_url).content
     with open(filename, "wb") as f:
         f.write(img_data)
 
+    
+def remove_file(filename):
+    if os.path.exists(filename):
+        os.remove(filename)
 
-async def send_comic(filename, chat_id, bot):
-    comic = get_random_comic()
-    img_url = comic["img"]
-    caption = comic["alt"]
 
-    download_image(img_url, filename)
-
-    input_file = FSInputFile(filename)
-
+def send_comic(filename, chat_id, bot, caption):
     try:
-        await bot.send_photo(chat_id=chat_id,
-                             photo=input_file,
-                             caption=caption)
+        with open(filename, 'rb') as image:
+            bot.send_photo(chat_id=chat_id,
+                           photo=image,
+                           caption=caption)
     finally:
-        if os.path.exists(filename):
-            os.remove(filename)
+        remove_file(filename)
 
 
 def main():
     load_dotenv()
 
-    tg_token = os.environ("TG_BOT_TOKEN")
-    chat_id = os.environ("TG_CHAT_ID")
+    tg_token = os.environ["TG_BOT_TOKEN"]
+    chat_id = os.environ["TG_CHAT_ID"]
     filename = "comics.png"
 
     bot = Bot(token=tg_token)
 
-    async def scheduler():
-        while True:
-            await send_comic(filename, chat_id, bot)
-            await asyncio.sleep(60 * 30)
-
-    asyncio.run(scheduler())
+    while True:
+        img_url, caption = get_comic_image_and_caption()
+        download_image(img_url, filename)
+        send_comic(filename, chat_id, bot, caption)
+        time.sleep(5)
 
 
 if __name__ == "__main__":
