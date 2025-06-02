@@ -25,11 +25,6 @@ def download_image(img_url, filename):
     with open(filename, "wb") as f:
         f.write(img_content)
 
-    
-def remove_file(filename):
-    if os.path.exists(filename):
-        os.remove(filename)
-
 
 def send_comic(filename, chat_id, bot, caption):
     with open(filename, 'rb') as image:
@@ -52,7 +47,8 @@ def main():
         try:
             send_comic(filename, chat_id, bot, caption)
         finally:
-            remove_file(filename)
+            if os.path.exists(filename):
+                os.remove(filename)
         time.sleep(60 * 30)
 
 
