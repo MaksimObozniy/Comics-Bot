@@ -37,13 +37,8 @@ def remove_file(filename):
 
 
 def send_comic(filename, chat_id, bot, caption):
-    try:
-        with open(filename, 'rb') as image:
-            bot.send_photo(chat_id=chat_id,
-                           photo=image,
-                           caption=caption)
-    finally:
-        remove_file(filename)
+    with open(filename, 'rb') as image:
+        bot.send_photo(chat_id=chat_id, photo=image, caption=caption)
 
 
 def main():
@@ -58,7 +53,10 @@ def main():
     while True:
         img_url, caption = get_comic_image_and_caption()
         download_image(img_url, filename)
-        send_comic(filename, chat_id, bot, caption)
+        try:
+            send_comic(filename, chat_id, bot, caption)
+        finally:
+            remove_file(filename)
         time.sleep(60 * 30)
 
 
