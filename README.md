@@ -25,9 +25,9 @@ pip install -r requirements.txt
 
 ### Enviroment variables
 
-- BOT_TOKEN
+- TG_BOT_TOKEN
 
-- CHAT_ID
+- TG_CHAT_ID
 
 1. Поместите файл `.env` рядом с `bot.py`.
 
@@ -51,7 +51,7 @@ CHAT_ID это ID вашего канала куда будет выкладыв
 
 ```bash
 -1008492606231
-#или так:
+#или же:
 @name_bot
 ```
 
