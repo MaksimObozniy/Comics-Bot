@@ -9,8 +9,8 @@ from dotenv import load_dotenv
 def get_random_comic():
     response = requests.get("https://xkcd.com/info.0.json")
     response.raise_for_status()
-    latest = response.json()
-    max_num = latest["num"]
+    latest_comic = response.json()
+    max_num = latest_comic["num"]
     num = random.randint(1, max_num)
     url = f"https://xkcd.com/{num}/info.0.json"
     response_url = requests.get(url)
